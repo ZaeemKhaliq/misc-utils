@@ -87,6 +87,11 @@ export default function CDatePicker(props: CDatePickerProps) {
   const [isYearSelectorOpen, setIsYearSelectorOpen] = useState<boolean>(false);
 
   const datesFlagsMatrix: number[][] = (() => {
+    // Flags lexicon
+    // 0 -> Date disabled for selection
+    // 1 -> Date enabled for selection
+    // 2 -> Selected Date
+
     let daysAdded = 0;
     const prev = structuredClone(datesFlagsMatrixInitState);
 
@@ -107,7 +112,7 @@ export default function CDatePicker(props: CDatePickerProps) {
         ) {
           prev[i][j] = 1;
           daysAdded += 1;
-          if (daysAdded === currentDate) {
+          if (daysAdded === currentDate && month === initMonth) {
             prev[i][j] = 2;
           }
         }
@@ -349,7 +354,7 @@ export default function CDatePicker(props: CDatePickerProps) {
     <CDatePickerStyled id="c-date-picker">
       <Dropdown open={isCalendarOpen} onClose={() => setIsCalendarOpen(false)}>
         <MenuButton
-          sx={{ gap: "0.25rem" }}
+          sx={{ gap: "0.25rem", background: "#fff" }}
           onClick={() =>
             setIsCalendarOpen((prev) => {
               const newValue = !prev;
@@ -375,11 +380,8 @@ export default function CDatePicker(props: CDatePickerProps) {
           {isYearSelectorOpen && (
             <Box className="year-selector">
               <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                <IconButton>
-                  <Close
-                    onClick={() => setIsYearSelectorOpen(false)}
-                    sx={{ cursor: "pointer", fontSize: "1.5rem" }}
-                  />
+                <IconButton onClick={() => setIsYearSelectorOpen(false)}>
+                  <Close sx={{ cursor: "pointer", fontSize: "1.5rem" }} />
                 </IconButton>
               </Box>
               <Box className="year-selector-grid-container">
